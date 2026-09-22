@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Калькулятор на React</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <style>
+    body { font-family: sans-serif; max-width: 400px; margin: 40px auto; }
+    input { width: 60px; margin: 5px; }
+    button { margin: 4px; padding: 6px 10px; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    function add(x, y) { return x + y; }
+    function subtract(x, y) { return x - y; }
+    function divide(x, y) {
+      if (y === 0) return "Деление на ноль невозможно";
+      return x / y;
+    }
+    function power(x, y) { return Math.pow(x, y); }
+
+    function App() {
+      const [a, setA] = useState(0);
+      const [b, setB] = useState(0);
+      const [operation, setOperation] = useState(null);
+      const [result, setResult] = useState("");
+
+      function calculate() {
+        switch (operation) {
+          case "add": setResult(add(a, b)); break;
+          case "subtract": setResult(subtract(a, b)); break;
+          case "divide": setResult(divide(a, b)); break;
+          case "power": setResult(power(a, b)); break;
+          default: setResult("Выберите операцию");
+        }
+      }
+
+      return (
+        <div>
+          <h1>Калькулятор</h1>
+
+          <div>
+            <label>
+              Число A:
+              <input type="number" value={a} onChange={e => setA(Number(e.target.value))} />
+            </label>
+            <br />
+            <label>
+              Число B:
+              <input type="number" value={b} onChange={e => setB(Number(e.target.value))} />
+            </label>
+          </div>
+
+          <div>
+            <button onClick={() => setOperation("add")}>Сложение</button>
+            <button onClick={() => setOperation("subtract")}>Вычитание</button>
+            <button onClick={() => setOperation("divide")}>Деление</button>
+            <button onClick={() => setOperation("power")}>Возведение в степень</button>
+          </div>
+
+          <button onClick={calculate}>Вычислить</button>
+
+          <h2>Результат: {result}</h2>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+  </script>
+</body>
+</html>
